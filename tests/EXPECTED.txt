@@ -1,0 +1,28 @@
+PII-AGENT verification record (2026-10-20, machine: 12 logical cores, 16 GiB RAM)
+Toolchain: gcc 16.2.0 (MSYS2 mingw64), -O3 -mavx2 -mtune=native -static.
+
+1. bin\pii_agent.exe selftest -> exit 0, 21/21 PASS
+   (AES-256/SHA256 vs OpenSSL 3.5 reference, UUID v4, mask counts +
+   all 6 mask/keep checks, exact roundtrip, vault JSON/seal/open/
+   tamper-reject, PDF write/extract).
+
+2. Sample CV roundtrip (tests/sample_cv.pdf, 2 pages: raw + FlateDecode):
+   mask -> entries=12: NAME=3 EMAIL=3 PHONE=3 FISCAL=2 ADDRESS=1
+   - masked: candidate + 2 third-party names, 3 emails, 3 phones,
+     CF16 + P.IVA-11, 1 street address -> [NAME_n]/[EMAIL_n]/[PHONE_n]/
+     [FISCAL_n]/[ADDRESS_n], 69 ms wall (sub-second).
+   - kept byte-identical: birth date 12/03/1987, Politecnico di Milano,
+     Liceo Volta, Acme Solutions S.p.A., Beta Consulting Srl,
+     Senior Software Engineer, Data Analyst, 2015-2022, Python/skills.
+   - unmask -> [UUID]_CV_restored.pdf, content-identical to source
+     (diff clean ignoring blank-line layout), vault securely deleted,
+     masked PDF retained.
+   - purge <UUID> -> vault destroyed, masked PDF retained.
+
+3. Trainer (v004 base, PII-scale L14/d1024/nh8/dff2816/T512, ~182M params):
+   builds clean (no errors), boots in data/state, /quit exit 0.
+   Persistence reuses v004 chunk save format (KBs at this scale);
+   no 14B OOC streaming structure.
+
+Topology budget: P = 2*1024*1024 + 14*(4*1024^2 + 3*1024*2816)
+= 181,927,936 ~= 182M < 1B. Trits ~37 MB resident.

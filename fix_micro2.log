@@ -1,0 +1,14 @@
+
+  train: 1 documenti, 1 epoca (1 passi/file).
+    1. scratch_train.txt
+  epoca 1 su 1 file.
+  file 1 di 1: scratch_train.txt ...
+    vocabolario imparato sul primo file: scratch_h/pii_bpe.txt.
+stream: 14/14 layer riusati dai chunk (init saltata).
+  modello pronto: V=1024 d=1024 L=14 T=512.
+    4088 finestre da 512 token: 1 passi...
+  perdita iniziale 6.93108 (perpl. 1023.60)  finale 6.93108 (perpl. 1023.60)  minima 6.93108 (perpl. 1023.60)  acc 0.0%
+    file salvato nei pesi esterni.
+  epoca 1 finita. Pesi salvati.
+  fatto: 1 passi totali. Pesi esterni aggiornati.
+EXIT=0
